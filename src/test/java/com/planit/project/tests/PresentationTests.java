@@ -3,21 +3,19 @@ package com.planit.project.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.planit.project.model.pages.InventoryPage;
 import com.planit.project.model.pages.LoginPage;
 
 import org.junit.jupiter.api.Test;
 
-public class Tests extends BaseTestSuite
+public class PresentationTests extends BaseTestSuite
 {
     @Test
-    // Justification: can only access https://www.saucedemo.com/inventory.html if
-    // user is authenticated. redirected to login if try to access without login
-    // need to account for response time
     public void verifySuccessfulLogin()
     {
-        var inventoryPage = new LoginPage(driver)
+        InventoryPage inventoryPage = new LoginPage(driver)
                 .setUsername("standard_user")
                 .setPassword("secret_sauce")
                 .clickLoginButton();
@@ -26,27 +24,17 @@ public class Tests extends BaseTestSuite
     }
 
     @Test
-    public void verifyAddProductToCart()
+    public void verifyAddProductToCartByItemName()
     {
-        String items = new LoginPage(driver)
+        List<String> items = new LoginPage(driver)
                 .loginAs("standard_user", "secret_sauce")
-                .addFirstItemOnPageToCart()
+                .addItemToCartByItemName("Sauce Labs Backpack")
+                .addItemToCartByItemName("Sauce Labs Fleece Jacket")
+                .addItemToCartByItemName("Sauce Labs Onesie")
                 .clickShoppingCartLink()
                 .getItemsInCart();
 
-        assertEquals("[Sauce Labs Backpack]", items);
-    }
-
-    @Test
-    public void verifyAddProductsToCart()
-    {
-        String items = new LoginPage(driver)
-                .loginAs("standard_user", "secret_sauce")
-                .addItemsOnPageToCart(3)
-                .clickShoppingCartLink()
-                .getItemsInCart();
-
-        assertEquals("[Sauce Labs Backpack, Sauce Labs Bike Light, Sauce Labs Bolt T-Shirt]", items);
+        assertEquals("[Sauce Labs Backpack, Sauce Labs Fleece Jacket, Sauce Labs Onesie]", items.toString());
     }
 
     @Test
@@ -54,13 +42,11 @@ public class Tests extends BaseTestSuite
     {
         InventoryPage products = new LoginPage(driver)
                 .loginAs("standard_user", "secret_sauce")
-                .selectLowToHigh();
+                .selectOption("Price (low to high)");
 
         String expected = Arrays.toString(new Double[]
         { 7.99, 9.99, 15.99, 15.99, 29.99, 49.99 });
 
-        assertEquals(
-                expected,
-                products.getProductPrices());
+        assertEquals(expected, products.getProductPrices());
     }
 }

@@ -1,10 +1,7 @@
 package com.planit.project.model.pages;
 
-import java.time.Duration;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage
 {
@@ -28,12 +25,6 @@ public class LoginPage extends BasePage
     public InventoryPage clickLoginButton()
     {
         driver.findElement(By.id("login-button")).click();
-
-        // put this wait here because it would be weird to put it in
-        // getInventoryContainer()
-        // was thinking of using a url but...
-        new WebDriverWait(driver, Duration.ofSeconds(20))
-                .until(driver -> driver.findElement(By.id("inventory_container")));
 
         return new InventoryPage(driver);
     }
