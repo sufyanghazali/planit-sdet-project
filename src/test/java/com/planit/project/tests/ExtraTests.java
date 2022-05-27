@@ -59,7 +59,7 @@ public class ExtraTests extends BaseTestSuite
                 .removeItemInCartByItemName("Sauce Labs Bike Light")
                 .getItemsInCart();
 
-        assertEquals(2, items.size());
+        assertEquals("[Sauce Labs Backpack, Sauce Labs Fleece Jacket]", items.toString());
     }
 
     @Test
